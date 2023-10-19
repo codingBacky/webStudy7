@@ -23,7 +23,7 @@ public class ProductListServlet extends HttpServlet {
 		ProductDAO pDao = ProductDAO.getInstance();
 		List<ProductVO> productList = pDao.selectAllProduct();
 		request.setAttribute("productList", productList);
-		
+		request.setAttribute("code", productList);
 		for(ProductVO vo : productList)
 			System.out.println(vo);
 		

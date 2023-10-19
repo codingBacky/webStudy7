@@ -16,16 +16,24 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 
-@WebServlet("/productWrite.do")
-public class ProductWriteServlet extends HttpServlet {
+@WebServlet("/productUpdate.do")
+public class ProductUpdate extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+       
+   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dis = request.getRequestDispatcher("product/productWriter.jsp");
-		dis.forward(request, response);
+		String code = request.getParameter("code");
+		System.out.println(code);
+		
+		ProductDAO pDao = ProductDAO.getInstance();
+		ProductVO vo = pDao.selectProductByCode(code);
+		
+		request.setAttribute("product", vo);
+		
+		RequestDispatcher dis = request.getRequestDispatcher("product/productUpdate.jsp");
+		dis.forward(request, response);//product/productUpdate.jsp의 post에 request 전달됨
 	}
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("utf-8");
@@ -42,12 +50,20 @@ public class ProductWriteServlet extends HttpServlet {
 													  encType,
 													  new DefaultFileRenamePolicy());
 		
+		String code = multi.getParameter("code");
 		String name = multi.getParameter("name");
 		int price = Integer.parseInt(multi.getParameter("price"));
 		String description = multi.getParameter("description");
 		String pictureurl = multi.getFilesystemName("pictureurl");
+		if(pictureurl == null) {
+			pictureurl = multi.getParameter("nonmakeImg");
+		}
+		
+	
+		
 		
 		ProductVO vo = new ProductVO();
+		vo.setCode(Integer.parseInt(code));
 		vo.setName(name);
 		vo.setPrice(price);
 		vo.setPictureurl(pictureurl);
@@ -57,11 +73,12 @@ public class ProductWriteServlet extends HttpServlet {
 		
 		
 		ProductDAO pDao = ProductDAO.getInstance();
-		int result = pDao.insertProduct(vo);
+		int result = pDao.updateProduct(vo);
 		System.out.println(result);
 		if(result == 1) response.sendRedirect("productList.do");
 		else response.sendRedirect("productWrite.do");
 		
 	}
+
 
 }

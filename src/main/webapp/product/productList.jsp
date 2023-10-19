@@ -32,8 +32,9 @@
         <td>${product.code}</td>
         <td>${product.name}</td>
         <td><fmt:formatNumber value="${product.price }"></fmt:formatNumber>원</td>
-        <td>상품 수정</td>
-        <td>상품 삭제</td>
+        <td><a href="productUpdate.do?code=${product.code }">상품 수정</a></td>
+        <td><a href="productDelete.do?code=${product.code }">상품 삭제</a></td>
+<%--         <td><a href="productDelete.do?code=${product.code }&name=${product.name}">상품 삭제</a></td> --%>
       </tr>
       </c:forEach>
     </tbody>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,7 @@
 <body>
 <div class="container">
   <h2>상품 등록 - 관리자 페이지</h2>
-  <form action="/productWrite.do" method="post" enctype="multipart/form-date" name="frm">
+  <form action="productWrite.do" method="post" enctype="multipart/form-data" name="frm">
     <div class="form-group">
       <label for="name">상품명:</label>
       <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
@@ -24,8 +25,8 @@
       <input type="text" class="form-control" id="price" placeholder="Enter price" name="price">
     </div>
     <div>
-      <label for="pictureurl">사진:</label>
-      <input type="file" id="pictureurl" placeholder="Enter pictureurl" name="pictureurl">
+      <label for="pictureurl">사진 :</label>
+      <input type="file" id="pictureurl" name="pictureurl"/> <br />
     </div>
     <div class="form-group">
       <label for="description">설명:</label>

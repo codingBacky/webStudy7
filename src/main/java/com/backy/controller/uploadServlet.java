@@ -1,4 +1,4 @@
-package com.backy;
+package com.backy.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;

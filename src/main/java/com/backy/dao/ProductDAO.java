@@ -91,7 +91,36 @@ public class ProductDAO {
 	}
 	//기본키 code 해당하는 데이터만 검색
 	public ProductVO selectProductByCode(String code) {
-		return null;
+		ProductVO vo = null;
+		String sql = "select * from product where code = ?";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, Integer.parseInt(code));
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				vo = new ProductVO();
+				vo.setCode(rs.getInt("code"));
+				vo.setName(rs.getString("name"));
+				vo.setPrice(rs.getInt("price"));
+				vo.setPictureurl(rs.getString("pictureurl"));
+				vo.setDescription(rs.getString("description"));
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			ProductDAO.close(conn, ps, rs);
+		}
+		
+		return vo;
 	}
 	//id,password 체크
 	public int userCheck(String userid, String pwd) {
@@ -103,11 +132,82 @@ public class ProductDAO {
 	}
 	//데이터 추가
 	public int insertProduct(ProductVO vo) {
-		return 0;
+		String sql = "insert into product values(product_seq.nextval,?,?,?,?)";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		int result = -1;
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			//맵핑
+			ps.setString(1, vo.getName());
+			ps.setInt(2, vo.getPrice());
+			ps.setString(3, vo.getPictureurl());
+			ps.setString(4, vo.getDescription());
+			result = ps.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				ProductDAO.close(conn, ps);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 	//데이터 수정
 	public int updateProduct(ProductVO vo) {
-		return 0;
+		String sql = "update product set name=?, price=?, pictureurl=?, description=? where code=?";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		int result = -1;
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			//맵핑
+			ps.setString(1, vo.getName());
+			ps.setInt(2, vo.getPrice());
+			ps.setString(3, vo.getPictureurl());
+			ps.setString(4, vo.getDescription());
+			ps.setInt(5, vo.getCode());
+			result = ps.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				ProductDAO.close(conn, ps);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public int deleteProduct(int code) {
+		String sql = "delete from product where code = ?";
+		Connection conn = null;
+		PreparedStatement ps = null;
+		int result = -1;
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			//맵핑
+			ps.setInt(1, code);
+			result = ps.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				ProductDAO.close(conn, ps);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }
 
